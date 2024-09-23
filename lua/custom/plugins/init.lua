@@ -9,7 +9,7 @@ return {
     config = function()
       require('nvim-tree').setup {}
 
-      vim.keymap.set('n', '<F2>', ':NvimTreeFindFileToggle<Enter>')
+      vim.keymap.set('n', '<F2>', ':NvimTreeFindFile<Enter>')
     end,
   },
   {
