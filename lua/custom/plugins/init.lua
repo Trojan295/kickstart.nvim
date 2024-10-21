@@ -101,4 +101,7 @@ return {
       },
     },
   },
+  {
+    'towolf/vim-helm',
+  },
 }
