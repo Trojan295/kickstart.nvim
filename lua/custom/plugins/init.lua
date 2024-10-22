@@ -104,4 +104,10 @@ return {
   {
     'towolf/vim-helm',
   },
+  {
+    'tenxsoydev/size-matters.nvim',
+  },
+  {
+    'f-person/git-blame.nvim',
+  },
 }
