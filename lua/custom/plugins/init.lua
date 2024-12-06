@@ -107,7 +107,4 @@ return {
   {
     'tenxsoydev/size-matters.nvim',
   },
-  {
-    'f-person/git-blame.nvim',
-  },
 }
