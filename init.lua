@@ -436,6 +436,15 @@ require('lazy').setup({
             })
           end
 
+          if client and client.name == 'svelte' then
+            vim.api.nvim_create_autocmd('BufWritePost', {
+              pattern = { '*.js', '*.ts' },
+              callback = function(ctx)
+                client.notify('$/onDidChangeTsOrJsFile', { uri = ctx.match })
+              end,
+            })
+          end
+
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
           --
@@ -511,6 +520,8 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        ensure_installed = {},
+        automatic_installation = true,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
