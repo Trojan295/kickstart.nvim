@@ -107,4 +107,7 @@ return {
   {
     'tenxsoydev/size-matters.nvim',
   },
+  {
+    'github/copilot.vim',
+  },
 }
