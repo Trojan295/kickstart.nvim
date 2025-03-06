@@ -23,7 +23,17 @@ return {
   {
     'EdenEast/nightfox.nvim',
     config = function()
-      vim.cmd 'colorscheme nordfox'
+      local home = os.getenv 'HOME'
+      local f = assert(io.open(home .. '/.config/theme', 'r'))
+      local theme = f:read('*all'):gsub('\n', '')
+      f:close()
+
+      if theme == 'light' then
+        print 'Using dawnfox'
+        vim.cmd 'colorscheme dawnfox'
+      elseif theme == 'dark' then
+        vim.cmd 'colorscheme nordfox'
+      end
     end,
   },
   {
