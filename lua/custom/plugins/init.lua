@@ -117,33 +117,28 @@ return {
   {
     'tenxsoydev/size-matters.nvim',
   },
+
   {
     'zbirenbaum/copilot.lua',
     config = function()
       require('copilot').setup {
-        --suggestion = {
-        --  enabled = true,
-        --  auto_trigger = true,
-        --},
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          keymap = {
+            accept = '<Tab>',
+          },
+        },
       }
     end,
   },
+
   {
     'yetone/avante.nvim',
     event = 'VeryLazy',
     version = false, -- Never set this value to "*"! Never!
     opts = {
       provider = 'copilot',
-      auto_suggestions_provider = 'copilot',
-
-      behaviour = {
-        auto_suggestions = true,
-      },
-      mappings = {
-        suggestion = {
-          accept = '<Tab>',
-        },
-      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = 'make',
