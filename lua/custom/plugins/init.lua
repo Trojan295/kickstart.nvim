@@ -126,7 +126,7 @@ return {
           enabled = true,
           auto_trigger = true,
           keymap = {
-            accept = '<Tab>',
+            accept = '<M-l>',
           },
         },
       }
@@ -139,6 +139,12 @@ return {
     version = false, -- Never set this value to "*"! Never!
     opts = {
       provider = 'copilot',
+      behaviour = {
+        use_cwd_as_project_root = true,
+      },
+      copilot = {
+        model = 'claude-3.5-sonnet',
+      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = 'make',
