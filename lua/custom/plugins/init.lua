@@ -142,8 +142,10 @@ return {
       behaviour = {
         use_cwd_as_project_root = true,
       },
-      copilot = {
-        model = 'claude-3.5-sonnet',
+      providers = {
+        copilot = {
+          model = 'claude-3.7-sonnet',
+        },
       },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
