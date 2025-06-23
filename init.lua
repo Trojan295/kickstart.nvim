@@ -152,58 +152,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
-  --
-
-  -- Alternatively, use `config = function() ... end` for full control over the configuration.
-  -- If you prefer to call `setup` explicitly, use:
-  --    {
-  --        'lewis6991/gitsigns.nvim',
-  --        config = function()
-  --            require('gitsigns').setup({
-  --                -- Your gitsigns configuration here
-  --            })
-  --        end,
-  --    }
-  --
-  -- Here is a more advanced example where we pass configuration
-  -- options to `gitsigns.nvim`.
-  --
-  -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
-
-  -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
-  --
-  -- This is often very useful to both group configuration, as well as handle
-  -- lazy loading plugins that don't need to be loaded immediately at startup.
-  --
-  -- For example, in the following configuration, we use:
-  --  event = 'VimEnter'
-  --
-  -- which loads which-key before all the UI elements are loaded. Events can be
-  -- normal autocommands events (`:help autocmd-events`).
-  --
-  -- Then, because we use the `opts` key (recommended), the configuration runs
-  -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
-
+  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
@@ -260,13 +209,6 @@ require('lazy').setup({
       },
     },
   },
-
-  -- NOTE: Plugins can specify dependencies.
-  --
-  -- The dependencies are proper plugin specifications as well - anything
-  -- you do for a plugin at the top level, you can do for a dependency.
-  --
-  -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
@@ -428,6 +370,15 @@ require('lazy').setup({
       --
       -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
+      --
+      vim.lsp.config('*', {
+        capabilities = {
+          workspace = {
+            -- This is used to enable the `$/onDidChangeTsOrJsFile` notification
+            didChangeWatchedFiles = { dynamicRegistration = true },
+          },
+        },
+      })
 
       --  This function gets run when an LSP attaches to a particular buffer.
       --    That is to say, every time a new file is opened that is associated with
@@ -495,15 +446,6 @@ require('lazy').setup({
               return client.supports_method(method, { bufnr = bufnr })
             end
           end
-
-          vim.lsp.config('*', {
-            capabilities = {
-              workspace = {
-                -- This is used to enable the `$/onDidChangeTsOrJsFile` notification
-                didChangeWatchedFiles = { dynamicRegistration = true },
-              },
-            },
-          })
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -711,63 +653,13 @@ require('lazy').setup({
     event = 'VimEnter',
     version = '1.*',
     dependencies = {
-      -- Snippet Engine
-      {
-        'L3MON4D3/LuaSnip',
-        version = '2.*',
-        build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
-          return 'make install_jsregexp'
-        end)(),
-        dependencies = {
-          -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
-        },
-        opts = {},
-      },
       'folke/lazydev.nvim',
     },
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
     opts = {
       keymap = {
-        -- 'default' (recommended) for mappings similar to built-in completions
-        --   <c-y> to accept ([y]es) the completion.
-        --    This will auto-import if your LSP supports it.
-        --    This will expand snippets if the LSP sent a snippet.
-        -- 'super-tab' for tab to accept
-        -- 'enter' for enter to accept
-        -- 'none' for no mappings
-        --
-        -- For an understanding of why the 'default' preset is recommended,
-        -- you will need to read `:help ins-completion`
-        --
-        -- No, but seriously. Please read `:help ins-completion`, it is really good!
-        --
-        -- All presets have the following mappings:
-        -- <tab>/<s-tab>: move to right/left of your snippet expansion
-        -- <c-space>: Open menu or open docs if already open
-        -- <c-n>/<c-p> or <up>/<down>: Select next/previous item
-        -- <c-e>: Hide menu
-        -- <c-k>: Toggle signature help
-        --
-        -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
-
-        -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-        --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+        preset = 'enter',
       },
 
       appearance = {
@@ -789,7 +681,7 @@ require('lazy').setup({
         },
       },
 
-      snippets = { preset = 'luasnip' },
+      snippets = { preset = 'default' },
 
       -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
       -- which automatically downloads a prebuilt binary when enabled.
@@ -801,7 +693,7 @@ require('lazy').setup({
       fuzzy = { implementation = 'lua' },
 
       -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
+      signature = { enabled = true, window = { show_documentation = true } },
     },
   },
 
