@@ -347,6 +347,17 @@ require('lazy').setup({
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
     },
+    opts = {
+      servers = {
+        svelte = {
+          capabilities = {
+            workspace = {
+              didChangeWatchedFiles = vim.fn.has 'nvim-0.10' == 0 and { dynamicRegistration = true },
+            },
+          },
+        },
+      },
+    },
     config = function()
       -- Brief aside: **What is LSP?**
       --
@@ -376,7 +387,6 @@ require('lazy').setup({
       vim.lsp.config('*', {
         capabilities = {
           workspace = {
-            -- This is used to enable the `$/onDidChangeTsOrJsFile` notification
             didChangeWatchedFiles = { dynamicRegistration = true },
           },
         },
@@ -481,9 +491,7 @@ require('lazy').setup({
           if client and client.name == 'svelte' then
             vim.api.nvim_create_autocmd('BufWritePost', {
               pattern = { '*.js', '*.ts' },
-              group = vim.api.nvim_create_augroup('svelte_ondidchangetsorjsfile', { clear = true }),
               callback = function(ctx)
-                -- Here use ctx.match instead of ctx.file
                 client:notify('$/onDidChangeTsOrJsFile', { uri = ctx.match })
               end,
             })
@@ -535,7 +543,6 @@ require('lazy').setup({
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = require('blink.cmp').get_lsp_capabilities()
-      -- capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -547,6 +554,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
@@ -595,17 +603,7 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      require('mason-lspconfig').setup {}
     end,
   },
 
@@ -767,7 +765,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'svelte' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
